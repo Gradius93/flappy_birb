@@ -18,12 +18,29 @@ pipeSouth.src = 'images/pipeSouth.png'
 
 // some variables
 
-const gap = 75
-const constant = pipeNorth.height + gap
+const gap = 325
+const constant = pipeNorth.height+gap
 
 var bX = 10
 var bY = 150
 var gravity = 1
+
+// on keyDown
+
+document.addEventListener('keydown', moveUp)
+
+function moveUp() {
+  bY -= 20
+}
+
+//pipe coordinates
+
+var pipe = []
+
+pipe[0] = {
+  x: cvs.width,
+  y: 0
+}
 
 // draw images
 
@@ -31,8 +48,21 @@ function draw() {
 
   ctx.drawImage(bg, 0, 0)
 
-  ctx.drawImage(pipeNorth, 100, 0)
-  ctx.drawImage(pipeSouth, 100, 0 + constant)
+  for(let i = 0; i < pipe.length; i++) {
+    ctx.drawImage(pipeNorth, pipe[i].x, pipe[i].y)
+    ctx.drawImage(pipeSouth, pipe[i].x, pipe[i].y + constant)
+
+    pipe[i].x--
+
+    if (pipe[i].x === 125) {
+      pipe.push({
+        x: cvs.width,
+        y: Math.floor(Math.random() * pipeNorth.height) - pipeNorth.height
+      })
+    }
+  }
+
+
 
   ctx.drawImage(fg,0,cvs.height - fg.height)
 
