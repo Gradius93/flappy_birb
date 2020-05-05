@@ -18,19 +18,31 @@ pipeSouth.src = 'images/pipeSouth.png'
 
 // some variables
 
-const gap = 325
+let score = 0
+
+const gap = 335
 const constant = pipeNorth.height+gap
 
 var bX = 10
 var bY = 150
-var gravity = 1
+var gravity = 1.5
+
+// audio
+
+var fly = new Audio()
+var scor = new Audio()
+
+fly.src = 'audio/sfx_wing.wav'
+
+scor.src = 'audio/sfx_point.wav'
 
 // on keyDown
 
 document.addEventListener('keydown', moveUp)
 
 function moveUp() {
-  bY -= 20
+  bY -= 25
+  fly.play()
 }
 
 //pipe coordinates
@@ -60,6 +72,16 @@ function draw() {
         y: Math.floor(Math.random() * pipeNorth.height) - pipeNorth.height
       })
     }
+
+    // detect collison
+    if(bX + bird.width >= pipe[i].x && bX <= pipe[i].x + pipeNorth.width && (bY <= pipe[i].y + pipeNorth.height || bY + bird.height >= pipe[i].y + constant) || bY + bird.height >= cvs.height - fg.height) {
+      location.reload()
+    }
+
+    if(pipe[i].x === 5) {
+      score++
+      scor.play()
+    }
   }
 
 
@@ -69,6 +91,12 @@ function draw() {
   ctx.drawImage(bird, bX, bY)
 
   bY += gravity
+
+  ctx.fillStyle = '#000'
+  ctx.font = '20px Verdana'
+  ctx.fillText('Score : ' + score, 10, cvs.height-20)
+
+
 
   requestAnimationFrame(draw)
 
